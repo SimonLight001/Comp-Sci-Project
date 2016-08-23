@@ -1,0 +1,9 @@
+<template name="questionsList">
+	<h2>Questions ({{incompleteCount}})</h2>
+	{{#each questions}}
+		{{subject}} - {{topic}} - level {{level}}<br>
+		{{question}} <br>
+		{{answer}} <br>
+		{{date}} ({{marks}}) <hr>
+	{{/each}}
+</template>

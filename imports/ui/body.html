@@ -1,0 +1,22 @@
+<template name="mainLayout">
+  <h2>Teachers Tests</h2>
+  {{>tabBar}}
+  {{> loginButtons align="right"}} 
+  <br><hr>
+  {{>Template.dynamic template=content}}
+</template>
+
+<template name="tabBar">
+  <div class="tabBarLinks">
+    <a href="/">Home</a> <a href="/tests">Your Tests</a> <a href="/questions">Question Search</a> <a href="/add">Add Questions</a>
+  </div>
+</template>
+
+<template name="home">
+  <h3>This is the home page</h3>
+</template>
+
+<template name="questions">
+  <h3>This is the questions search page</h3>
+</template>
+

@@ -1,0 +1,31 @@
+.tabBarLinks {
+	text-align: center;
+	display: inline-block;
+    zoom: 1;
+    display: inline;
+}
+
+.tabBarLinks a {
+	margin-bottom: :-10px;
+	margin-right: 10px;
+}
+
+#login-buttons{
+	display: block;
+	margin-top: -20px;
+	margin-bottom: -10px;
+	margin-left: 95%; 
+}
+
+input {
+    width: 400px;
+}
+
+input[type="submit"] {
+	width: 170px;
+}
+
+textarea {
+	width: 400px;
+	height: 70px; 
+}
