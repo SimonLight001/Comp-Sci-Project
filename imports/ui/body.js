@@ -5,6 +5,7 @@ import { ReactiveVar } from 'meteor/reactive-var';
 import { ReactiveDict } from 'meteor/reactive-dict';
 
 import { Questions } from '../api/questions.js';
+import { Tests } from '../api/tests.js';
 
 
 import './body.html';
@@ -16,9 +17,11 @@ import './templates/list.html';
 import './templates/tests.html';
 import './templates/tests.js';
 
+
 Template.body.onCreated(function bodyOnCreated() {
 	this.state = new ReactiveDict();
 	Meteor.subscribe('questions');
+	Meteor.subscribe('tests');
 });
 
 Template.tabBar.events({

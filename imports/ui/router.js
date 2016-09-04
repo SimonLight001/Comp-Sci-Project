@@ -32,3 +32,9 @@ FlowRouter.route('/addtest', {
 		BlazeLayout.render("mainLayout", {content: "addtest"})
 	}
 })
+
+FlowRouter.route('/addtest/:testId', {
+	action: function(){
+		BlazeLayout.render("mainLayout", {content: "testQuestions"})
+	}
+})

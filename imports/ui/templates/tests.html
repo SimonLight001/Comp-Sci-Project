@@ -1,15 +1,94 @@
 <template name='tests'>
-	<a href="/addtest">New Test</a>
+	<a href="/addtest">New Test</a><br><br>
+	{{#each test}}
+		{{this.testName}}<br>
+		{{this.testSubject}}<br>
+		{{this.testTopic}}<br>
+		{{this.testDate}}<br>
+		{{this.testLength}}<hr>
+	{{/each}}
 </template>
 
 <template name="addtest">
-	<form>
-		<label>Test Name</label><br>
+	<form class="add-test">
+		<label for="name">Test Name</label><br>
 		<input type="text" name="name" placeholder="The name of your new test"><br>
 		<label>Class</label><br>
 		<input type="text" name="class" placeholder="What class is your test for"><br>
+		<label>Subject</label><br>
+		<select name="subject" id="subjectPick">
+			<option> - Subject - </option>
+			{{#each subject}}
+				<option value="{{subject}}">{{subject}}</option>
+			{{/each}}
+			<option value="new">New Subject</option>
+		</select>
+		<input type="text" name="newSubject" id="newSubject" placeholder="Input new subject here" style="visibility:hidden"><br>
+
+		<label>Topic</label><br>
+		<select name="topic" id="topicPick">
+			<option id="topicOption"> - Topic - </option>
+			
+			<option value="new">New Subject</option>
+		</select>
+
+		<input type="text" name="topic" id="newTopic" placeholder="Input new subject here" style="visibility:hidden"><br>
+		
+
 		<label>Level Range</label><br>
 		<input type="number" name="levelLower" value="3"> to <input type="number" name="levelUpper" value="3"> <br>
+		<label>Date of Use</label><br>
+		<select name="month">
+	      <option> - Month - </option>
+	      <option value="Jan">January</option>
+	      <option value="Feb">February</option>
+	      <option value="Mar">March</option>
+	      <option value="Apr">April</option>
+	      <option value="May">May</option>
+	      <option value="Jun">June</option>
+	      <option value="Jul">July</option>
+	      <option value="Aug">August</option>
+	      <option value="Sep">September</option>
+	      <option value="Oct">October</option>
+	      <option value="Nov">November</option>
+	      <option value="Dec">December</option>
+	    </select>
+	    <select name="year">
+	      <option> - Year - </option>
+	      <option value="2016">2016</option>
+	      <option value="2017">2017</option>
+	      <option value="2018">2018</option>
+	      <option value="2019">2019</option>
+	      <option value="2020">2020</option>
+	      <option value="2021">2021</option>
+	      <option value="2022">2022</option>
+	    </select> <br>
+	    <label>Length (Minutes)</label><br>
+	    <input type="number" name="length" value="60"><br>
+	    <label>Mark/Minute Modifier</label><br>
+	    <input type="number" name="markminmodifier" value="1" step="0.1"><br>
+	    <label>Comments</label><br>
+	    <textarea name="comments" class="comments" id="comments" form="add-test" placeholder="Any additional comments go here"></textarea> <br>
+
+	    <input type="submit" name="submit" value="Create"><a href="/tests">Cancel</a>
 
 	</form>
+</template>
+
+<template name="testQuestions">
+{{#with thisTest}}
+<div class="menuBar">
+	<h2>{{this.testName}}</h2><h3> / {{testTotal}}</h3> <hr>
+</div>
+{{/with}}
+<div class="searchResults">
+	{{#with thisTest}}
+	{{#each questions}}
+		<b>{{subject}} - {{topic}} - level {{level}}</b> <a href="/addtest/{{thisTest._id}}" id="addToTest" style="margin-left: 10px;">Add</a><br>
+		<b>Q:</b> {{question}} <br>
+		<b>A:</b> {{answer}} <br>
+		{{date}} ({{marks}}) <hr>
+	{{/each}}
+	{{/with}}
+</div>
 </template>
