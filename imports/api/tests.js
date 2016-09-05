@@ -9,14 +9,12 @@ if (Meteor.isServer) {
   // Only publish events that belong to the current user
   Meteor.publish('tests', function testsPublication() {
     return Tests.find();
-    console.log("published tests");
     //return Venues.find();
   });
 }
 
 Meteor.methods({
   'tests.insert'(testName, testClass, testSubject, testTopic, testLowerLevel, testUpperLevel, testDate, testLength, testMarkMinMod, testComments, testOwner, testCreateTime) {
-    console.log("run tests.insert");
  
     // Make sure the user is logged in before inserting a task
     if (! this.userId) {
@@ -40,5 +38,8 @@ Meteor.methods({
   },
   'tests.addQuestion'(testId, question){
     Tests.update({ _id: testId },{ $push: { testQuestions: question }});
+  },
+  'tests.removeQuestion' (testId, question){
+    Tests.update({_id: testId},{$pull: { testQuestions: question }});
   }
 });

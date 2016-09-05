@@ -5,8 +5,10 @@
 		{{this.testSubject}}<br>
 		{{this.testTopic}}<br>
 		{{this.testDate}}<br>
-		{{this.testLength}}<hr>
+		Time : {{this.testLength}} mins<br>
+		<a href="/test/{{this._id}}">View Test</a><hr>
 	{{/each}}
+
 </template>
 
 <template name="addtest">
@@ -76,19 +78,65 @@
 </template>
 
 <template name="testQuestions">
-{{#with thisTest}}
-<div class="menuBar">
-	<h2>{{this.testName}}</h2><h3> / {{testTotal}}</h3> <hr>
-</div>
-{{/with}}
-<div class="searchResults">
 	{{#with thisTest}}
-	{{#each questions}}
-		<b>{{subject}} - {{topic}} - level {{level}}</b> <a href="/addtest/{{thisTest._id}}" id="addToTest" style="margin-left: 10px;">Add</a><br>
-		<b>Q:</b> {{question}} <br>
-		<b>A:</b> {{answer}} <br>
-		{{date}} ({{marks}}) <hr>
-	{{/each}}
+		<div class="menuBar">
+			<h2>{{this.testName}}</h2><h3>{{currentTotal}} / {{testTotal}}</h3> 
+			<form name="deleteFromTest" id="deleteFromTest">
+				<select name="deleteSelect" id="deleteSelect">
+					<option value="null"> - Questions - </option>
+					{{#each currentQuestions}}
+						<option value="{{this._id}}">{{this.data}}</option>
+					{{/each}}
+				</select>
+				<input type="submit" name="deleteFromTest" id="deleteFromTest" value="Remove">
+			</form>
+			<button id="genTest">View Test</button>
+			<hr>
+		</div>
 	{{/with}}
-</div>
+	<div class="searchResults">
+		{{#with thisTest}}
+		{{#each questions}}
+			<b>{{subject}} - {{topic}} - level {{level}}</b> <u><a id="addToTest" style="margin-left: 10px; color: blue">Add</a></u><br>
+			<b>Q:</b> {{question}} <br>
+			<b>A:</b> {{answer}} <br>
+			{{date}} ({{marks}}) <hr>
+		{{/each}}
+		{{/with}}
+	</div>
+</template>
+
+<template name="testView">
+	{{#with thisTest}}
+		<a href="/tests">Back to tests</a> <a href="/edittest/{{this._id}}">Edit Test</a><br>
+		<b>{{this.testClass}}</b> <span id="right">{{this.testDate}}</span><br>
+		<b>{{this.testTopic}}</b> <br>
+	{{/with}}
+</template>
+
+<template name="editTest">
+	{{#with thisTest}}
+		<div class="menuBar">
+			<h2>{{this.testName}}</h2><h3>{{currentTotal}} / {{testTotal}}</h3> 
+			<form name="deleteFromTest" id="deleteFromTest">
+				<select name="deleteSelect" id="deleteSelect">
+					<option value="null"> - Questions - </option>
+					{{#each currentQuestions}}
+						<option value="{{this._id}}">{{this.data}}</option>
+					{{/each}}
+				</select>
+				<input type="submit" name="deleteFromTest" id="deleteFromTest" value="Remove">
+			</form>
+			<button id="genTest">View Test</button>
+			<hr>
+		</div>
+	{{/with}}
+	<div class="searchResults">
+		{{#each questions}}
+			<b>{{subject}} - {{topic}} - level {{level}}</b> <u><a id="addToTest" style="margin-left: 10px; color: blue">Add</a></u><br>
+			<b>Q:</b> {{question}} <br>
+			<b>A:</b> {{answer}} <br>
+			{{date}} ({{marks}}) <hr>
+		{{/each}}
+	</div>
 </template>

@@ -9,12 +9,9 @@ import '../question_summary.html';
 
 Template.questionsList.helpers({
 	test(){
-		console.log("test");
 	},
 	questions(){
 		if(Meteor.isClient){
-			console.log("fetching");
-			console.log(Questions.find().fetch());
 			return Questions.find();
 		}
 	},

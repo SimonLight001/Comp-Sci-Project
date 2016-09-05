@@ -9,14 +9,12 @@ if (Meteor.isServer) {
   // Only publish events that belong to the current user
   Meteor.publish('questions', function questionsPublication() {
     return Questions.find();
-    console.log("published questions");
     //return Venues.find();
   });
 }
 
 Meteor.methods({
   'questions.insert'(subject, topic, level, marks, date, question, answer) {
-    console.log("run questions.insert");
  
     // Make sure the user is logged in before inserting a task
     if (! this.userId) {
@@ -36,7 +34,6 @@ Meteor.methods({
   'events.update'(name, did, subject, topic, level, marks, date, question, answerescription, 
       startDate, endDate, startTime, 
       endTime, eventId) {
-    console.log("run events.update");
     check(name, String);
 
     //checking privelleges

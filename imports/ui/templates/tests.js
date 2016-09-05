@@ -9,6 +9,7 @@ import './tests.html';
 
 Template.tests.helpers({
 	test(){
+		console.log(Tests.find().fetch());
 		return Tests.find();
 	}
 });
@@ -36,7 +37,6 @@ Template.addtest.helpers({
 	topic(){
 		var topics = new ReactiveVar();
 		topics = extTopic();
-		console.log(topics);
 		return topics;
 	}
 });
@@ -86,7 +86,6 @@ Template.addtest.events({
 	'submit .add-test'(event){
 		event.preventDefault();
 
-		console.log("preparing to submit form");
 
 		const target = event.target;
 		const testName = target.name.value;
@@ -111,13 +110,11 @@ Template.addtest.events({
 			testSubject = target.newTopic.value;
 		}
 
-		console.log("new test : ", testName, testClass, testSubject, testTopic, testLowerLevel, testUpperLevel, testDate, testLength, testMarkMinMod, testComments, testOwner, testCreateTime);
 
 		Meteor.call('tests.insert', testName, testClass, testSubject, testTopic, testLowerLevel, testUpperLevel, testDate, testLength, testMarkMinMod, testComments, testOwner, testCreateTime);
 
 		var justAdded = Tests.findOne({"testName" : testName, "testOwner" : testOwner, "testCreateTime" : testCreateTime});
 
-		console.log(justAdded);
 
 		window.location.assign("/addtest/" + justAdded._id);
 
@@ -125,10 +122,34 @@ Template.addtest.events({
 	}
 });
 
+function findTests(){
+	if(Meteor.isClient){
+		var testId = FlowRouter.getParam("testId");
+		console.log(testId);
+		var test = Tests.findOne({"_id": testId});
+		console.log(test);
+		var questions = [];
+		questions = test.testQuestions;
+		if (questions == null) {
+			console.log("in if");
+			return Questions.find().fetch();
+		} else {
+			console.log("in else");
+			var questionsArray = Questions.find().fetch();
+			var unusedQuestions = [];
+			for(var i = 0; i < questionsArray.length; i++){
+				if(!(questions.includes(questionsArray[i]._id))){
+					unusedQuestions.push(questionsArray[i]);
+				}
+			} 
+			return unusedQuestions;
+		}
+	}
+}
+
 Template.testQuestions.helpers({
 	thisTest(){
 		var testId = FlowRouter.getParam("testId");
-		console.log(testId);
 		return Tests.findOne({"_id" : testId});
 	},
 	testTotal(){
@@ -137,20 +158,142 @@ Template.testQuestions.helpers({
 		return test.testMarkMinMod * test.testLength;
 	},
 	questions(){
-		if(Meteor.isClient){
-			console.log("fetching");
-			console.log(Questions.find().fetch());
-			return Questions.find();
+		return findTests();
+	},
+	currentQuestions() {
+		var testId = FlowRouter.getParam("testId");
+		var test = Tests.findOne({"_id": testId});
+		var questions = test.testQuestions;
+		if(questions != null){
+			if (questions != undefined) {
+				var questionsObj = [];
+				for(var i = 0; i < questions.length; i++){
+					var questionData = Questions.findOne({"_id": questions[i]});
+					questionData = questionData.question;
+					var toPush = {"_id" : questions[i], "data" : questionData};
+					questionsObj.push(toPush);
+				}
+				return questionsObj;
+			} else {
+				return ;
+			}
+		} else {
+			return ;
+		}
+
+
+	},
+	currentTotal(){
+		var testId = FlowRouter.getParam("testId");
+		var test = Tests.findOne({"_id": testId});
+		var questions = test.testQuestions;
+		if(questions != null){
+			if (questions != undefined) {
+				var total = 0;
+				for(var i = 0; i < questions.length; i++)
+				{
+					var question = Questions.findOne({"_id": questions[i]});
+					total += parseInt(question.marks);
+				}
+				var multiplier = test.testMarkMinMod;
+				total = total *  multiplier;
+				return total;
+			} else {
+				return ;
+			}
+
+		} else { 
+			return ;
 		}
 	}
 });
 
 Template.testQuestions.events({
+	'submit #deleteFromTest' (event){
+		event.preventDefault();
+
+		var testId = FlowRouter.getParam("testId");
+		var target = event.target;
+		var questionId = target.deleteSelect.value;
+		if(questionId != "null")
+		{
+			Meteor.call('tests.removeQuestion', testId, questionId);	
+		} else {
+			alert("Please select a question to remove first");
+		}
+		
+	},
 	'click #addToTest' (event) {
 		var testId = FlowRouter.getParam("testId");
 		var questionId = this._id;
 		Meteor.call('tests.addQuestion', testId, questionId);
 		//Tests.addQuestion(testId, questionId);
-		console.log(Tests.find({"_id" : testId}).fetch());
 	},
+	'click #genTest' (event){
+		var testId = FlowRouter.getParam("testId");
+		window.location.assign("/test/" + testId);
+	},
+});
+
+Template.testView.helpers({
+	thisTest(){
+		var testId = FlowRouter.getParam("testId");
+		console.log(testId);
+		console.log(Tests.findOne({"_id" : testId}).fetch());
+		return Tests.findOne({"_id" : testId});
+	},
+	testTotal(){
+		var testId = FlowRouter.getParam("testId");
+		test = Tests.findOne({"_id" : testId});
+		return test.testMarkMinMod * test.testLength;
+	},
+	questions(){
+		return findTests();
+	},
+	currentQuestions() {
+		var testId = FlowRouter.getParam("testId");
+		var test = Tests.findOne({"_id": testId});
+		var questions = test.testQuestions;
+		if(questions != null){
+			if (questions != undefined) {
+				var questionsObj = [];
+				for(var i = 0; i < questions.length; i++){
+					var questionData = Questions.findOne({"_id": questions[i]});
+					questionData = questionData.question;
+					var toPush = {"_id" : questions[i], "data" : questionData};
+					questionsObj.push(toPush);
+				}
+				return questionsObj;
+			} else {
+				return ;
+			}
+		} else {
+			return ;
+		}
+
+
+	},
+	currentTotal(){
+		var testId = FlowRouter.getParam("testId");
+		var test = Tests.findOne({"_id": testId});
+		var questions = test.testQuestions;
+		if(questions != null){
+			if (questions != undefined) {
+				var total = 0;
+				for(var i = 0; i < questions.length; i++)
+				{
+					var question = Questions.findOne({"_id": questions[i]});
+					total += parseInt(question.marks);
+				}
+				var multiplier = test.testMarkMinMod;
+				total = total *  multiplier;
+				return total;
+			} else {
+				return ;
+			}
+
+		} else { 
+			return ;
+		}
+	}
 });

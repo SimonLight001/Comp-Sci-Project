@@ -26,6 +26,5 @@ Template.body.onCreated(function bodyOnCreated() {
 
 Template.tabBar.events({
 	'click a'(event){
-		console.log(event);
 	}
 });

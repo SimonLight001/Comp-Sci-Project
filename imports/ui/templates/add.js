@@ -33,15 +33,11 @@ Template.add.events({
   	const questionQuestion = $('textarea.question').get(0).value;
   	const questionAnswer = $('textarea.answer').get(0).value;
 
-  	console.log("adding: ", questionSubject,
-  		questionTopic, questionLevel, questionMarks,
-  		questionDate, questionQuestion, questionAnswer);
 
     Meteor.call('questions.insert', questionSubject,
       questionTopic, questionLevel, questionMarks,
       questionDate, questionQuestion, questionAnswer);
 
-    console.log("added");
 
     //redirect
   },
@@ -50,7 +46,6 @@ Template.add.events({
 Template.add.helpers({
 	thisQuestion() {
 		const questionId=FlowRouter.getParam("questionId");
-    	console.log("Adding question: ", questionId);
 		return Questions.findOne({"_id": questionId});
 	},
 });
