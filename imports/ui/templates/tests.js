@@ -238,8 +238,6 @@ Template.testQuestions.events({
 Template.testView.helpers({
 	thisTest(){
 		var testId = FlowRouter.getParam("testId");
-		console.log(testId);
-		console.log(Tests.findOne({"_id" : testId}).fetch());
 		return Tests.findOne({"_id" : testId});
 	},
 	testTotal(){
@@ -296,4 +294,37 @@ Template.testView.helpers({
 			return ;
 		}
 	}
+});
+
+Template.editTest.helpers({
+	thisTest(){
+		var testId = FlowRouter.getParam("testId");
+		return Tests.findOne({"_id" : testId});
+	},
+	currentQuestions() {
+		var testId = FlowRouter.getParam("testId");
+		var test = Tests.findOne({"_id": testId});
+		var questions = test.testQuestions;
+		if(questions != null){
+			if (questions != undefined) {
+				var questionsObj = [];
+				for(var i = 0; i < questions.length; i++){
+					var questionData = Questions.findOne({"_id": questions[i]});
+					questionData = questionData.question;
+					var toPush = {"_id" : questions[i], "data" : questionData};
+					questionsObj.push(toPush);
+				}
+				return questionsObj;
+			} else {
+				return ;
+			}
+		} else {
+			return ;
+		}
+
+
+	},
+	questions(){
+		return findTests();
+	},
 });

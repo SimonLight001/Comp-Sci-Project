@@ -24,3 +24,6 @@ kadira:blaze-layout
 accounts-ui
 accounts-password
 random
+3stack:blaze-datetimepicker
+tsega:bootstrap3-datetimepicker
+manuel:reactivearray
