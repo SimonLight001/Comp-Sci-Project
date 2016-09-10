@@ -50,3 +50,15 @@ FlowRouter.route('/edittest/:testId', {
 		BlazeLayout.render("mainLayout", {content: "editTest"});
 	}
 });
+
+FlowRouter.route('/print/:testId/test', {
+		action: function(){
+		BlazeLayout.render("printTest");
+	}
+});
+
+FlowRouter.route('/print/:testId/mark', {
+		action: function(){
+		BlazeLayout.render("printMark");
+	}
+});

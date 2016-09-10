@@ -108,9 +108,15 @@
 
 <template name="testView">
 	{{#with thisTest}}
-		<a href="/tests">Back to tests</a> <a href="/edittest/{{this._id}}">Edit Test</a><br>
+		<a href="/tests">Back to tests</a> <a href="/edittest/{{this._id}}">Edit Test</a><a href="/print/{{this._id}}/test">Print Test</a><a href="/print/{{this._id}}/mark">Print Mark Scheme</a><br>
 		<b>{{this.testClass}}</b> <span id="right">{{this.testDate}}</span><br>
 		<b>{{this.testTopic}}</b> <br>
+		{{#each questions}}
+			<b>{{subject}} - {{topic}} - level {{level}}</b> <br>
+			<b>Q:</b> {{question}} <br>
+			<b>A:</b> {{answer}} <br>
+			{{date}} ({{marks}}) <hr>			
+		{{/each}}
 	{{/with}}
 </template>
 
@@ -139,4 +145,22 @@
 			{{date}} ({{marks}}) <hr>
 		{{/each}}
 	</div>
+</template>
+
+<template name="printTest">
+	<span id="toRemove"><u><a style="margin-left: 10px; color: blue">Print</a></u><hr></span>
+	{{#each questions}}
+		{{question}} <br>
+		<b>({{marks}})</b> <hr>
+	{{/each}}
+</template>
+
+<template name="printMark">
+	<span id="toRemove"><u><a style="margin-left: 10px; color: blue">Print</a></u><hr></span>
+	{{#each questions}}
+		<b>{{topic}} - {{level}}</b><br>
+		{{question}} <br>
+		{{answer}}<br>
+		<b>({{marks}})</b> <hr>
+	{{/each}}
 </template>

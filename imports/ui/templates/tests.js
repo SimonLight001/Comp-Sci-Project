@@ -328,3 +328,56 @@ Template.editTest.helpers({
 		return findTests();
 	},
 });
+
+Template.editTest.events({
+	'submit #deleteFromTest' (event){
+		event.preventDefault();
+
+		var testId = FlowRouter.getParam("testId");
+		var target = event.target;
+		var questionId = target.deleteSelect.value;
+		if(questionId != "null")
+		{
+			Meteor.call('tests.removeQuestion', testId, questionId);	
+		} else {
+			alert("Please select a question to remove first");
+		}
+		
+	},
+	'click #addToTest' (event) {
+		var testId = FlowRouter.getParam("testId");
+		var questionId = this._id;
+		Meteor.call('tests.addQuestion', testId, questionId);
+		//Tests.addQuestion(testId, questionId);
+	},
+	'click #genTest' (event){
+		var testId = FlowRouter.getParam("testId");
+		window.location.assign("/test/" + testId);
+	},
+});
+
+Template.printTest.helpers({
+	questions(){
+		return findTests();
+	},
+});
+
+Template.printTest.events({
+	'click' (event){
+		document.getElementById('toRemove').innerHTML = "";
+		window.print();
+	}
+});
+
+Template.printMark.helpers({
+	questions(){
+		return findTests();
+	},
+});
+
+Template.printMark.events({
+	'click' (event){
+		document.getElementById('toRemove').innerHTML = "";
+		window.print();
+	}
+})
